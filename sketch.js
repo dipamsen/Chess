@@ -16,13 +16,13 @@ let p = {
 }
 let sprites = {}
 
-let whitePieces = [];
-let blackPieces = [];
+let board = new Board;
+
+let currentPlayer = c.WHITE
 
 function setup() {
   createCanvas(480, 480)
   span = width / rows
-
   let flag = 0;
   for (let i = 0; i < rows; i++) {
     cells[i] = [];
@@ -32,7 +32,7 @@ function setup() {
     }
     flag = flag == c.WHITE ? c.BLACK : c.WHITE
   }
-  setupBoard();
+  board.setup();
 }
 
 function draw() {
@@ -42,8 +42,20 @@ function draw() {
     for (let j = 0; j < rows; j++)
       cells[i][j].display()
 
-  for (let piece of whitePieces) piece.display();
-  for (let piece of blackPieces) piece.display();
+  for (let piece of board.blackPieces) {
+    if (!piece.moving) piece.display();
+    // piece.moving = false
+  }
+  for (let piece of board.whitePieces) {
+    if (!piece.moving) piece.display();
+    // piece.moving = false
+  }
+  let movingPiece = board.getMovingPiece();
+  if (movingPiece) {
+    movingPiece.x = mouseX / span - 0.5 //- span / 2;
+    movingPiece.y = mouseY / span - 0.5 //- span / 2;
+    movingPiece.display();
+  }
 }
 
 
@@ -57,40 +69,36 @@ function preload() {
   }
 }
 
-function setupBoard() {
-  new Rook(0, 0, c.BLACK)
-  new Rook(7, 0, c.BLACK)
-  new Knight(1, 0, c.BLACK)
-  new Knight(6, 0, c.BLACK)
-  new Bishop(2, 0, c.BLACK)
-  new Bishop(5, 0, c.BLACK)
-  new King(4, 0, c.BLACK);
-  new Queen(3, 0, c.BLACK)
-
-  for (let i = 0; i < rows; i++) {
-    new Pawn(i, 1, c.BLACK)
-  }
-
-  new Rook(0, 7, c.WHITE)
-  new Rook(7, 7, c.WHITE)
-  new Knight(1, 7, c.WHITE)
-  new Knight(6, 7, c.WHITE)
-  new Bishop(2, 7, c.WHITE)
-  new Bishop(5, 7, c.WHITE)
-  new King(4, 7, c.WHITE);
-  new Queen(3, 7, c.WHITE)
-
-  for (let i = 0; i < rows; i++) {
-    new Pawn(i, 6, c.WHITE)
-  }
-}
-
-let moving = false;
-
 function mousePressed() {
-
+  if (!board.getMovingPiece()) {
+    let x = floor(mouseX / span)
+    let y = floor(mouseY / span)
+    let selectedPiece = board.getPiece(x, y)
+    // console.log(x, y);
+    if (selectedPiece && selectedPiece.col == currentPlayer) {
+      selectedPiece.moving = true;
+      selectedPiece.prev = createVector(x, y);
+    }
+  }
 }
 
-function getPiece(x, y) {
-
+function mouseReleased() {
+  let movingP = board.getMovingPiece();
+  if (movingP) {
+    movingP.moving = false;
+    let x = floor(mouseX / span);
+    let y = floor(mouseY / span);
+    if (!(x == movingP.prev.x && y == movingP.prev.y)) {
+      let canPlay = movingP.playMove(x, y);
+      if (canPlay) {
+        movingP.x = x;
+        movingP.y = y;
+        currentPlayer = currentPlayer == c.WHITE ? c.BLACK : c.WHITE
+      }
+      else {
+        movingP.x = movingP.prev.x;
+        movingP.y = movingP.prev.y;
+      }
+    }
+  }
 }
