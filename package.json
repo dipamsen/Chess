@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Chess Game in JavaScript",
   "scripts": {
-    "dev": "parcel index.html"
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "repository": {
     "type": "git",
