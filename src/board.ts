@@ -1,7 +1,13 @@
 import { Piece, Rook, Knight, Bishop, King, Queen, Pawn } from './piece'
 import { Players as c, Pieces as p, Dimensions as d, BoardColors } from './constants'
 import * as p5 from 'p5'
+import Cell from './cell';
 const { Rows: rows, Span: span } = d;
+
+interface Vector {
+  x: number,
+  y: number
+}
 
 class Board {
   whitePieces: Piece[] = []
@@ -10,14 +16,16 @@ class Board {
     [c.WHITE]: this.whitePieces,
     [c.BLACK]: this.blackPieces
   }
+  cells: Cell[] = []
   p5: p5
   sprites: Object
   addPiece(piece: Piece) {
     this.pieces[piece.col].push(piece)
   }
-  setup(p5: p5, sprites: Object) {
+  setup(p5: p5, sprites: Object, cells: Cell[]) {
     this.p5 = p5
     this.sprites = sprites
+    this.cells = cells
 
     this.addPiece(new Rook(0, 7, c.WHITE, p5, sprites, this))
     this.addPiece(new Rook(7, 7, c.WHITE, p5, sprites, this))
@@ -46,17 +54,10 @@ class Board {
     }
   }
   display(): void {
-    let flag = "white";
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < rows; j++) {
-        if (flag == c.BLACK) this.p5.fill(BoardColors.dark);
-        else this.p5.fill(BoardColors.light);
-        this.p5.noStroke();
-        this.p5.rect(j * span, i * span, span, span);
-        flag = flag == c.WHITE ? c.BLACK : c.WHITE
-      }
-      flag = flag == c.WHITE ? c.BLACK : c.WHITE
-    }
+    this.cells.forEach(cell => cell.display())
+  }
+  getCell({ x, y }: Vector): Cell {
+    return this.cells[8 * x + y]
   }
   getAlivePiece(x: number, y: number): Piece {
     for (let piece of this.whitePieces)

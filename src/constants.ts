@@ -4,12 +4,12 @@ export enum Players {
 }
 
 export enum Pieces {
-  KING = "king",
-  QUEEN = "queen",
-  ROOK = "rook",
-  PAWN = "pawn",
-  KNIGHT = "knight",
-  BISHOP = "bishop"
+  KING = "K",
+  QUEEN = "Q",
+  ROOK = "R",
+  PAWN = "",
+  KNIGHT = "N",
+  BISHOP = "B"
 }
 
 export enum CellType {
@@ -22,7 +22,21 @@ export const Dimensions = {
   Span: 60
 }
 
-export const BoardColors = {
-  light: '#F0D9B5',
-  dark: '#B58863'
+export enum BoardColors {
+  LIGHT = '#F0D9B5',
+  DARK = '#B58863',
+  LIGHT_HIGHLIGHT = "#AAA23A",
+  DARK_HIGHLIGHT = "#CDD26A",
+  CHOOSE = "#829769"
 }
+
+export enum HighlightType {
+  LastPlayed = "lastplayed",
+  Selected = "selected",
+}
+
+export const Ranks = [8, 7, 6, 5, 4, 3, 2, 1]
+
+export const Files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 
+
+export

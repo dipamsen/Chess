@@ -7,7 +7,6 @@ const { Rows: rows, Span: span } = d;
 export abstract class Piece {
   alive: Boolean = true
   moving: Boolean = false
-  selected: Boolean = false
   piece: string
   prev: p5.Vector
   constructor(
@@ -26,7 +25,7 @@ export abstract class Piece {
       let w = span;
       if (this.moving) w = span * 1.2
       p5.tint(255);
-      if (this.selected) p5.tint(255, 0, 0)
+      // if (this.selected) p5.tint(255, 0, 0)
       p5.image(sprites[this.col][this.piece], this.x * span + span / 2, this.y * span + span / 2, w, w)
       p5.pop();
     }
@@ -57,10 +56,10 @@ export class King extends Piece {
     super(x, y, col, p5, sprites, board);
     this.piece = p.KING
   }
-  canMoveTo(x, y) {
+  canMoveTo(x: number, y: number) {
     return this.p5.abs(this.prev.x - x) <= 1 && this.p5.abs(this.prev.y - y) <= 1
   }
-  canKillTo(x, y) {
+  canKillTo(x: number, y: number) {
     return this.p5.abs(this.prev.x - x) <= 1 && this.p5.abs(this.prev.y - y) <= 1
   }
 }
@@ -71,10 +70,10 @@ export class Queen extends Piece {
     super(x, y, col, p5, sprites, board);
     this.piece = p.QUEEN
   }
-  canMoveTo(x, y) {
+  canMoveTo(x: number, y: number) {
     return (this.p5.abs(this.prev.x - x) == this.p5.abs(this.prev.y - y)) || (this.prev.x == x || this.prev.y == y);
   }
-  canKillTo(x, y) {
+  canKillTo(x: number, y: number) {
     return (this.p5.abs(this.prev.x - x) == this.p5.abs(this.prev.y - y)) || (this.prev.x == x || this.prev.y == y);
   }
 }
@@ -85,10 +84,10 @@ export class Bishop extends Piece {
     super(x, y, col, p5, sprites, board);
     this.piece = p.BISHOP
   }
-  canMoveTo(x, y) {
+  canMoveTo(x: number, y: number) {
     return this.p5.abs(this.prev.x - x) == this.p5.abs(this.prev.y - y);
   }
-  canKillTo(x, y) {
+  canKillTo(x: number, y: number) {
     return this.p5.abs(this.prev.x - x) == this.p5.abs(this.prev.y - y);
   }
 }
@@ -99,10 +98,10 @@ export class Rook extends Piece {
     super(x, y, col, p5, sprites, board);
     this.piece = p.ROOK
   }
-  canMoveTo(x, y) {
+  canMoveTo(x: number, y: number) {
     return this.prev.x == x || this.prev.y == y;
   }
-  canKillTo(x, y) {
+  canKillTo(x: number, y: number) {
     return this.prev.x == x || this.prev.y == y;
   }
 }
@@ -122,7 +121,7 @@ export class Pawn extends Piece {
   get frontY2() {
     return this.col == c.WHITE ? this.prev.y - 2 : this.prev.y + 2
   }
-  canMoveTo(x, y) {
+  canMoveTo(x: number, y: number) {
     if (this.prev.x !== x) return false;
     else {
       if (y == this.frontY) return true
@@ -132,7 +131,7 @@ export class Pawn extends Piece {
       else return false;
     }
   }
-  canKillTo(x, y) {
+  canKillTo(x: number, y: number) {
     return (this.kills[0].x == x && this.kills[0].y == y) || (this.kills[1].x == x && this.kills[1].y == y);
   }
   get kills() {
@@ -162,12 +161,12 @@ export class Knight extends Piece {
       { x: x - 2, y: y - 1 },
     ];
   }
-  canMoveTo(x, y) {
+  canMoveTo(x: number, y: number) {
     for (let mov of this.possibleMoves)
       if (mov.x == x && mov.y == y) return true;
     return false
   }
-  canKillTo(x, y) {
+  canKillTo(x: number, y: number) {
     for (let mov of this.possibleMoves)
       if (mov.x == x && mov.y == y) return true;
     return false
