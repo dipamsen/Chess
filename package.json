@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/dipamsen/Chess#readme",
   "dependencies": {
+    "chess.js": "^0.11.0",
     "p5": "^1.1.9"
   },
   "devDependencies": {
+    "@types/chess.js": "^0.10.1",
     "@types/p5": "^0.9.1",
     "parcel-bundler": "^1.12.4",
     "typescript": "^4.0.5"

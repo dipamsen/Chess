@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   },
   "include": [
     "./"
-  ]
+  ],
 }
